@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JARVIS AI</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#080d18;color:#eaf4ff;
+ font-family:Arial,sans-serif;min-height:100vh;
+ display:flex;justify-content:center;align-items:center;
+}
+.app{
+ width:100%;max-width:500px;min-height:100vh;
+ padding:25px 18px;text-align:center;
+ background:linear-gradient(160deg,#101d32,#080d18);
+}
+h1{letter-spacing:7px;color:#65d9ff;margin-top:35px}
+.status{color:#7b91a8;font-size:13px}
+.circle{
+ width:180px;height:180px;border-radius:50%;
+ border:2px solid #39cfff;margin:55px auto 25px;
+ display:flex;align-items:center;justify-content:center;
+ box-shadow:0 0 25px #087ba9, inset 0 0 25px #087ba9;
+}
+.core{
+ width:95px;height:95px;border-radius:50%;
+ background:radial-gradient(circle,#d8faff,#19a8e0,#075078);
+ box-shadow:0 0 35px #21caff;
+}
+button{
+ border:1px solid #35cfff;background:#102b43;
+ color:white;padding:14px 22px;border-radius:25px;
+ font-size:15px;margin:8px;cursor:pointer;
+}
+button:active{background:#17618a}
+#message{
+ margin-top:30px;color:#b9d8ed;min-height:50px;
+}
+input{
+ width:75%;padding:14px;border-radius:20px;
+ border:1px solid #315b78;background:#101d2d;
+ color:white;font-size:15px;
+}
+.footer{margin-top:45px;color:#536c83;font-size:12px}
+</style>
+</head>
+<body>
+<div class="app">
+ <h1>J.A.R.V.I.S</h1>
+ <p class="status">PERSONAL AI ASSISTANT</p>
+ <div class="circle"><div class="core"></div></div>
+ <p class="status" id="status">SYSTEM ONLINE • READY</p>
+ <div id="message">Hello! I am JARVIS. How can I help you?</div>
+ <button onclick="listen()">🎙 Speak</button>
+ <div>
+  <input id="prompt" placeholder="Type your message...">
+  <button onclick="send()">Send</button>
+ </div>
+ <div class="footer">JARVIS AI • VERSION 1.0</div>
+</div>
+<script>
+function send(){
+ const box=document.getElementById("prompt");
+ const msg=box.value.trim();
+ if(!msg)return;
+ document.getElementById("message").innerText="You: "+msg;
+ box.value="";
+}
+function listen(){
+ const Speech=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!Speech){
+  document.getElementById("status").innerText="VOICE NOT SUPPORTED IN THIS BROWSER";
+  return;
+ }
+ const recognition=new Speech();
+ recognition.lang="en-IN";
+ recognition.onstart=()=>document.getElementById("status").innerText="LISTENING...";
+ recognition.onresult=(e)=>{
+  document.getElementById("prompt").value=e.results[0][0].transcript;
+  document.getElementById("status").innerText="VOICE CAPTURED";
+ };
+ recognition.onerror=()=>document.getElementById("status").innerText="VOICE ERROR";
+ recognition.start();
+}
+</script>
+</body>
+</html>
